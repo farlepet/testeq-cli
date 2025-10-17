@@ -1,0 +1,11 @@
+[package]
+name = "testeq-cli"
+description = "Command line tool for interacting with various test equipment"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[dependencies]
+anyhow = "1.0"
+testeq-rs = { git = "https://github.com/farlepet/testeq-rs.git" }
+tokio = "1.48"
