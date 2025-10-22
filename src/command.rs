@@ -69,10 +69,13 @@ impl<'a, T: BaseEquipment + ?Sized> Commands<'a, T> {
         if handlers.is_empty() {
             bail!("No command matching '{cmd}'");
         } else if handlers.len() > 1 {
-            bail!(
-                "Ambiguous command, multiple matches: {:?}",
-                handlers.iter().map(|hand| &hand.cmd).collect::<Vec<_>>()
-            );
+            match handlers.iter().find(|hand| hand.cmd == cmd) {
+                Some(handler) => return (handler.func)(eq, args).await,
+                None => bail!(
+                    "Ambiguous command, multiple matches: {:?}",
+                    handlers.iter().map(|hand| &hand.cmd).collect::<Vec<_>>()
+                ),
+            }
         }
 
         (handlers[0].func)(eq, args).await

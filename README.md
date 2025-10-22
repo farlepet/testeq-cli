@@ -11,6 +11,9 @@ Command-line tool for interacting with test equipment
   * VXI-11 devices: `vxi11://<host>[:<port>]`
   * SCPI over TCP: `tcp://<host>:<port>`
   * Serial: `serial:<port>[?baud=<baud>]`
+* `command`
+  * The `help` command will list available commands for the detected equipment
+  * Some per-equipment commands are listed below
 
 ## Supported equipment
 
@@ -23,3 +26,10 @@ To see specific supported models, see [testeq-rs](https://github.com/farlepet/te
   * `read_voltage` Get current voltage
   * `read_current` Get current current
   * `read_power` Get current power
+* Multimeters
+  * `status` General status
+  * `mode` Get/set channel mode
+  * `read` Read channel reading
+  * `read_now` Trigger DMM and read channel reading
+  * `trig_source` Get/set trigger source
+  * `arm` Arm trigger

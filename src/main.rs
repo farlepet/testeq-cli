@@ -3,7 +3,7 @@ use std::env;
 use anyhow::{Result, bail};
 use testeq_rs::equipment::{self, Equipment};
 
-use crate::devices::psu;
+use crate::devices::{dmm, psu};
 
 mod command;
 mod devices;
@@ -23,6 +23,7 @@ async fn main() -> Result<()> {
     let equipment = equipment::equipment_from_uri(uri).await?;
 
     match equipment {
+        Equipment::Multimeter(mut dmm) => dmm::handle_command(dmm.as_mut(), &args[2..]).await?,
         Equipment::PowerSupply(mut psu) => psu::handle_command(psu.as_mut(), &args[2..]).await?,
         _ => bail!("Unsupported equipment type"),
     }
