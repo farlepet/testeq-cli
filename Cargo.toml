@@ -9,4 +9,4 @@ license = "MIT"
 anyhow = "1.0"
 env_logger = "0.11"
 testeq-rs = { git = "https://git.pfarley.dev/pfarley/testeq-rs.git" }
-tokio = "1.48"
+tokio = "1.49"
