@@ -1,6 +1,6 @@
-use std::sync::Arc;
+use std::{sync::Arc, time::Duration};
 
-use anyhow::{Result, bail};
+use anyhow::{Result, anyhow, bail};
 use testeq_rs::{
     data::{Reading, Unit},
     equipment::psu::{PowerSupplyChannel, PowerSupplyEquipment},
@@ -28,6 +28,12 @@ pub async fn handle_command<'a>(
                 "<chan> [<enable>]",
                 "Get/set power supply channel enabled",
                 command_enable
+            ),
+            cmd_hdlr_args!(
+                "pulse",
+                "<chan> <state> <duration ms>",
+                "Enable/disable power supply channel for duration",
+                command_pulse
             ),
             cmd_hdlr_args!(
                 "set_voltage",
@@ -90,6 +96,14 @@ async fn get_chan(
     Ok(psu.get_channel(chan.parse()?).await?)
 }
 
+fn parse_state(value: &str) -> Result<bool> {
+    match value.to_lowercase().as_ref() {
+        "0" | "off" | "false" => Ok(false),
+        "1" | "on" | "true" => Ok(true),
+        _ => Err(anyhow!("Invalid state value '{}'", value)),
+    }
+}
+
 async fn command_enable(psu: &mut dyn PowerSupplyEquipment, args: &[String]) -> Result<()> {
     if (args.len() < 2) || (args.len() > 3) {
         bail!("Usage: ... enable <channel> [<state>]")
@@ -102,14 +116,30 @@ async fn command_enable(psu: &mut dyn PowerSupplyEquipment, args: &[String]) -> 
         let en = channel.get_enabled().await?;
         println!("{en}");
     } else {
-        let state = match args[2].to_lowercase().as_ref() {
-            "0" | "off" | "false" => false,
-            "1" | "on" | "true" => true,
-            _ => bail!("Invalid state value '{}'", args[2]),
-        };
-
+        let state = parse_state(&args[2])?;
         channel.set_enabled(state).await?;
     }
+
+    Ok(())
+}
+
+async fn command_pulse(psu: &mut dyn PowerSupplyEquipment, args: &[String]) -> Result<()> {
+    if args.len() != 4 {
+        bail!("Usage: ... pulse <chan> <state> <duration ms>");
+    }
+
+    let channel = get_chan(psu, &args[1]).await?;
+    let mut channel = channel.lock().await;
+
+    let state = parse_state(&args[2])?;
+
+    let duration = args[3].parse()?;
+
+    /* TODO: Some PSUs may support this functionality inherently - should add
+     * such support directly to testeq-rs. */
+    channel.set_enabled(state).await?;
+    tokio::time::sleep(Duration::from_millis(duration)).await;
+    channel.set_enabled(!state).await?;
 
     Ok(())
 }

@@ -554,7 +554,7 @@ dependencies = [
 [[package]]
 name = "testeq-rs"
 version = "0.1.0"
-source = "git+https://github.com/farlepet/testeq-rs.git#9287e810cc7a167faa8992e0e9a0d6abd5af14ab"
+source = "git+https://git.pfarley.dev/pfarley/testeq-rs.git#9287e810cc7a167faa8992e0e9a0d6abd5af14ab"
 dependencies = [
  "async-trait",
  "futures",
