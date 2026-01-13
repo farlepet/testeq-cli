@@ -535,7 +535,7 @@ dependencies = [
 
 [[package]]
 name = "testeq-cli"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -545,8 +545,8 @@ dependencies = [
 
 [[package]]
 name = "testeq-rs"
-version = "0.1.0"
-source = "git+https://git.pfarley.dev/pfarley/testeq-rs.git#b5ba1d919123c3b018110f1562e014da448933dc"
+version = "0.1.1"
+source = "git+https://git.pfarley.dev/pfarley/testeq-rs.git#6f1dc6a1b7a4b75f5fe373cb6d899010762f747f"
 dependencies = [
  "async-trait",
  "futures",
