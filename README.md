@@ -11,6 +11,7 @@ Command-line tool for interacting with test equipment
   * VXI-11 devices: `vxi11://<host>[:<port>]`
   * SCPI over TCP: `tcp://<host>:<port>`
   * Serial: `serial:<port>[?baud=<baud>]`
+  * USBTMC: `usbtmc:<VID>:<PID>[?serial=<serial>]`
 * `command`
   * The `help` command will list available commands for the detected equipment
   * Some per-equipment commands are listed below
